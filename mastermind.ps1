@@ -1,19 +1,45 @@
+# assign colors available 
 $available_colors = @('blue', 'green', 'red', 'yellow', 'orange', 'black')
+
+# list 4 x above for random selection
 $second_list = @($available_colors + $available_colors + $available_colors + $available_colors)
+
+# assign random secret
 $colors = @($second_list | Get-Random -Count 4)
+
+# define indexes
 $numbers = @(0, 1, 2, 3)
+
+#  'all correct' result to match
 $correct = @('red', 'red', 'red', 'red')
+
+# starting gameplay iteration
 $counter = 10
+
+# Write initial text
 Write-Host "Available colors are: blue, green, red, yellow, orange, black"
 Write-Host $colors
-DO
+
+#
+DO # main loop
 {
+# Notify of progress and display prompt
 Write-Host "You have $counter tries left, enter 4 comma separated colors"
 $args = @(((Read-host -Prompt '> ').Split(",")).Trim())
+
+# red/white pins to return
 $true_list = @()
+
+# validate number of args
 if ($args) {
+
+# make copy of the list of colors
     $copy = $colors.Clone()
+
+# loop through indexes to compare args to elements of copy
     ForEach ($i in $numbers) {
+# check for correct arg/color in correct index position
+# and assign red pin if true
         if ($args[$i] -eq $copy[$i]) {
             $true_list += 'red'
             $copy[$i] = "selected"
@@ -21,23 +47,30 @@ if ($args) {
     }
     $copy_2 = $copy.Clone()
     ForEach ($i in $numbers) {
+# check for correct arg/color in incorrect index position (ie. if in list)
         if ($args[$i] -in $copy_2) {
             ForEach ($j in $numbers) {
+# remove index from possible red/white pins returned
                 if ($copy_2[$j] -eq $args[$i]) {
                     $copy_2[$j] = "copied"
                     break
                 }
             }
+# and assign white pin if true
             $true_list += 'white'
         }
     }
+# if true list is correct (ie. if we have all red pins)
     $print = Compare-Object $true_list $correct
     if ($null -eq $print) {
         Write-Host "You are the MASTERMIND!!!!"
-        exit
+# exit all upon success
+        exit 
     } else {
+# sort return list with red pins at beginning
         $true_list = $true_list | Sort-Object
         ForEach ($i in $true_list) {
+# colorize each output pin
             if ($i -eq "red") {
                 Write-Host $i " " -ForegroundColor Red -NoNewline
             } else {
@@ -48,5 +81,7 @@ if ($args) {
         $counter -= 1
     }
 }
-} While ( $counter -gt 0)
+} While ( $counter -gt 0)  # while we still have more tries left
+
+# if we got this far we didn't win.
 Write-Host "The correct answer is $colors"
