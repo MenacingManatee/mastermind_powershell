@@ -12,7 +12,11 @@ $flag = 0;
 Write-Host "You have $counter tries left, enter 4 comma separated colors"
 $args = @(((Read-host -Prompt '> ').Split(",")).Trim())
 $true_list = @()
-if ($args) {
+
+# validate number of args
+if ($args.length -eq 4) {
+
+# make copy of the list of colors
     $copy = $colors.Clone()
     ForEach ($i in $numbers) {
         if ($args[$i] -notin $available_colors) {
@@ -57,6 +61,8 @@ if ($args) {
         Write-Host ''
         $counter -= 1
     }
+} else {
+	Write-Host "Enter 4 comma separated colors!"
 }
 } While ( $counter -gt 0)
 Write-Host "The correct answer is $colors"
