@@ -20,10 +20,12 @@ $counter = 10
 Write-Host "Available colors are: blue, green, red, yellow, orange, black"
 Write-Host $colors
 
-#
+   #
 DO # main loop
 {
+
 # Notify of progress and display prompt
+$flag = 0;
 Write-Host "You have $counter tries left, enter 4 comma separated colors"
 $args = @(((Read-host -Prompt '> ').Split(",")).Trim())
 
@@ -31,46 +33,64 @@ $args = @(((Read-host -Prompt '> ').Split(",")).Trim())
 $true_list = @()
 
 # validate number of args
-if ($args) {
+if ($args.length -eq 4) {
 
-# make copy of the list of colors
+    # make copy of the list of colors
     $copy = $colors.Clone()
 
-# loop through indexes to compare args to elements of copy
+    # loop through indexes to compare args to elements of copy
     ForEach ($i in $numbers) {
-# check for correct arg/color in correct index position
-# and assign red pin if true
+
+        # check for correct arg/color in correct index position
+        # and assign red pin if true
+        if ($args[$i] -notin $available_colors) {
+            $flag += 1
+        }
+    }
+    if ($flag -eq 1) {
+        Write-Host "Invalid color detected, try again"
+        continue
+    }
+    $args_copy = $args.Clone()
+    ForEach ($i in $numbers) {
         if ($args[$i] -eq $copy[$i]) {
             $true_list += 'red'
             $copy[$i] = "selected"
+            $args_copy[$i] = "selected"
         }
     }
     $copy_2 = $copy.Clone()
     ForEach ($i in $numbers) {
-# check for correct arg/color in incorrect index position (ie. if in list)
-        if ($args[$i] -in $copy_2) {
+
+        # check for correct arg/color in incorrect index position (ie. if in list)
+        if ($args_copy[$i] -in $copy_2) {
             ForEach ($j in $numbers) {
-# remove index from possible red/white pins returned
+                # remove index from possible red/white pins returned
                 if ($copy_2[$j] -eq $args[$i]) {
                     $copy_2[$j] = "copied"
                     break
                 }
             }
-# and assign white pin if true
+
+            # and assign white pin if true
             $true_list += 'white'
         }
     }
-# if true list is correct (ie. if we have all red pins)
+
+    # if true list is correct (ie. if we have all red pins)
     $print = Compare-Object $true_list $correct
     if ($null -eq $print) {
         Write-Host "You are the MASTERMIND!!!!"
-# exit all upon success
+
+        # exit all upon success
         exit 
     } else {
-# sort return list with red pins at beginning
+
+        # sort return list with red pins at beginning
         $true_list = $true_list | Sort-Object
         ForEach ($i in $true_list) {
-# colorize each output pin
+
+            # colorize each output pin
             if ($i -eq "red") {
                 Write-Host $i " " -ForegroundColor Red -NoNewline
             } else {
@@ -80,7 +100,11 @@ if ($args) {
         Write-Host ''
         $counter -= 1
     }
+} else {
+	Write-Host "Enter 4 comma separated colors!"
 }
+
+                           #
 } While ( $counter -gt 0)  # while we still have more tries left
 
 # if we got this far we didn't win.
