@@ -1,4 +1,4 @@
-# assign colors available 
+# assign colors available
 $available_colors = @('blue', 'green', 'red', 'yellow', 'orange', 'black')
 
 # list 4 x above for random selection
@@ -56,17 +56,18 @@ if ($args.length -eq 4) {
         if ($args[$i] -eq $copy[$i]) {
             $true_list += 'red'
             $copy[$i] = "selected"
-            $args_copy[$i] = "selected"
+            $args_copy[$i] = "args_selected"
         }
     }
     $copy_2 = $copy.Clone()
+    Write-Host $args_copy
     ForEach ($i in $numbers) {
 
         # check for correct arg/color in incorrect index position (ie. if in list)
         if ($args_copy[$i] -in $copy_2) {
             ForEach ($j in $numbers) {
                 # remove index from possible red/white pins returned
-                if ($copy_2[$j] -eq $args[$i]) {
+                if ($copy_2[$j] -eq $args_copy[$i]) {
                     $copy_2[$j] = "copied"
                     break
                 }
