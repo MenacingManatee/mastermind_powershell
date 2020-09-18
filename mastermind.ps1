@@ -18,7 +18,6 @@ $counter = 10
 
 # Write initial text
 Write-Host "Available colors are: blue, green, red, yellow, orange, black"
-Write-Host $colors
 
    #
 DO # main loop
@@ -60,7 +59,6 @@ if ($args.length -eq 4) {
         }
     }
     $copy_2 = $copy.Clone()
-    Write-Host $args_copy
     ForEach ($i in $numbers) {
 
         # check for correct arg/color in incorrect index position (ie. if in list)
