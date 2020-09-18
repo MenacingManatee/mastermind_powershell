@@ -8,11 +8,21 @@ Write-Host "Available colors are: blue, green, red, yellow, orange, black"
 Write-Host $colors
 DO
 {
+$flag = 0;
 Write-Host "You have $counter tries left, enter 4 comma separated colors"
 $args = @(((Read-host -Prompt '> ').Split(",")).Trim())
 $true_list = @()
 if ($args) {
     $copy = $colors.Clone()
+    ForEach ($i in $numbers) {
+        if ($args[$i] -notin $available_colors) {
+            $flag += 1
+        }
+    }
+    if ($flag -eq 1) {
+        Write-Host "Invalid color detected, try again"
+        continue
+    }
     ForEach ($i in $numbers) {
         if ($args[$i] -eq $copy[$i]) {
             $true_list += 'red'
