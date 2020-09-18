@@ -5,6 +5,7 @@ $numbers = @(0, 1, 2, 3)
 $correct = @('red', 'red', 'red', 'red')
 $counter = 10
 Write-Host "Available colors are: blue, green, red, yellow, orange, black"
+Write-Host $colors
 DO
 {
 Write-Host "You have $counter tries left, enter 4 comma separated colors"
@@ -18,10 +19,17 @@ if ($args) {
             $copy[$i] = "selected"
         }
     }
+    $copy_2 = $copy.Clone()
     ForEach ($i in $numbers) {
-        if ($args[$i] -in $copy) {
+        if ($args[$i] -in $copy_2) {
+            ForEach ($j in $numbers) {
+                if ($copy_2[$j] -eq $args[$i]) {
+                    $copy_2[$j] = "copied"
+                    break
+                }
+            }
             $true_list += 'white'
-        } 
+        }
     }
     $print = Compare-Object $true_list $correct
     if ($null -eq $print) {
@@ -29,7 +37,14 @@ if ($args) {
         exit
     } else {
         $true_list = $true_list | Sort-Object
-        Write-Host $true_list
+        ForEach ($i in $true_list) {
+            if ($i -eq "red") {
+                Write-Host $i " " -ForegroundColor Red -NoNewline
+            } else {
+                Write-Host $i " " -ForegroundColor White -NoNewline
+            }
+        }
+        Write-Host ''
         $counter -= 1
     }
 }
