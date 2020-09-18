@@ -17,7 +17,7 @@ $correct = @('red', 'red', 'red', 'red')
 $counter = 10
 
 # Write initial text
-Write-Host "Available colors are: blue, green, red, yellow, orange, black"
+Write-Output "Available colors are: blue, green, red, yellow, orange, black"
 
    #
 DO # main loop
@@ -82,7 +82,7 @@ if ($args.length -eq 4) {
         Write-Host "You are the MASTERMIND!!!!"
 
         # exit all upon success
-        exit 
+        exit
     } else {
 
         # sort return list with red pins at beginning
