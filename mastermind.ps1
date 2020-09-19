@@ -25,7 +25,7 @@ DO # main loop
 
 # Notify of progress and display prompt
 $flag = 0;
-Write-Host "You have $counter tries left, enter 4 comma separated colors"
+Write-Output "You have $counter tries left, enter 4 comma separated colors"
 $args = @(((Read-host -Prompt '> ').Split(",")).Trim())
 
 # red/white pins to return
@@ -47,7 +47,7 @@ if ($args.length -eq 4) {
         }
     }
     if ($flag -eq 1) {
-        Write-Host "Invalid color detected, try again!"
+        Write-Output "Invalid color detected, try again!"
         continue
     }
     $args_copy = $args.Clone()
@@ -80,7 +80,7 @@ if ($args.length -eq 4) {
     $print = Compare-Object $true_list $correct
     $no_match = "No match, try again!"
     if ($null -eq $print) {
-        Write-Host "You are the MASTERMIND!!!!"
+        Write-Output "You are the MASTERMIND!!!!"
 
         # exit all upon success
         exit
@@ -98,15 +98,15 @@ if ($args.length -eq 4) {
             }
 	    $no_match = ''
         }
-        Write-Host $no_match
+        Write-Output $no_match
         $counter -= 1
     }
 } else {
-	Write-Host "Enter 4 comma separated colors!"
+	Write-Output "Enter 4 comma separated colors!"
 }
 
                            #
 } While ($counter -gt 0)  # while we still have more tries left
 
 # if we got this far we didn't win.
-Write-Host "The correct answer is $colors"
+Write-Output "The correct answer is $colors"
