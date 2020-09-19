@@ -17,7 +17,7 @@ $correct = @('red', 'red', 'red', 'red')
 $counter = 10
 
 # Write initial text
-Write-Host "Available colors are: blue, green, red, yellow, orange, black"
+Write-Output "Available colors are: blue, green, red, yellow, orange, black"
 
    #
 DO # main loop
@@ -47,7 +47,7 @@ if ($args.length -eq 4) {
         }
     }
     if ($flag -eq 1) {
-        Write-Host "Invalid color detected, try again"
+        Write-Host "Invalid color detected, try again!"
         continue
     }
     $args_copy = $args.Clone()
@@ -78,11 +78,12 @@ if ($args.length -eq 4) {
 
     # if true list is correct (ie. if we have all red pins)
     $print = Compare-Object $true_list $correct
+    $no_match = "No match, try again!"
     if ($null -eq $print) {
         Write-Host "You are the MASTERMIND!!!!"
 
         # exit all upon success
-        exit 
+        exit
     } else {
 
         # sort return list with red pins at beginning
@@ -95,8 +96,9 @@ if ($args.length -eq 4) {
             } else {
                 Write-Host $i " " -ForegroundColor White -NoNewline
             }
+	    $no_match = ''
         }
-        Write-Host ''
+        Write-Host $no_match
         $counter -= 1
     }
 } else {
@@ -104,7 +106,7 @@ if ($args.length -eq 4) {
 }
 
                            #
-} While ( $counter -gt 0)  # while we still have more tries left
+} While ($counter -gt 0)  # while we still have more tries left
 
 # if we got this far we didn't win.
 Write-Host "The correct answer is $colors"
