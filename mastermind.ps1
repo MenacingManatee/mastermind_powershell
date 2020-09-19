@@ -1,3 +1,30 @@
+#
+# mastermind in PowerShell
+## 
+
+
+# function to colorize output later/further below
+function Write-ColorOutput($ForegroundColor)
+{
+    # save the current color
+    $fc = $host.UI.RawUI.ForegroundColor
+
+    # set the new color
+    $host.UI.RawUI.ForegroundColor = $ForegroundColor
+
+    # output
+    if ($args) {
+        Write-Output $args
+    }
+    else {
+        $input | Write-Output
+    }
+
+    # restore the original color
+    $host.UI.RawUI.ForegroundColor = $fc
+}
+
+
 # assign colors available
 $available_colors = @('blue', 'green', 'red', 'yellow', 'orange', 'black')
 
@@ -92,13 +119,13 @@ if ($args.length -eq 4) {
 
             # colorize each output pin
             if ($i -eq "red") {
-                Write-Host $i " " -ForegroundColor Red -NoNewline
+                Write-ColorOutput red "$i"
             } else {
-                Write-Host $i " " -ForegroundColor White -NoNewline
+                Write-ColorOutput white "$i"
             }
 	    $no_match = ''
         }
-        Write-Output $no_match
+        if ($no_match -ne '') { Write-Output $no_match }
         $counter -= 1
     }
 } else {
